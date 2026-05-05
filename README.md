@@ -1,2 +1,2 @@
-# goodshyt-group-9l6jy7xh
+# goodshyt-group
 Documentation for goodshyt-group
