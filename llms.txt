@@ -1,0 +1,14 @@
+# goodshyt-group
+
+> Documentation for goodshyt-group, powered by Fern.
+
+This repository contains documentation configuration for the goodshyt-group project.
+
+## Key files
+
+- `README.md`
+- `docs.yaml`
+
+## Custom domain
+
+This documentation is published at: https://goodshyt.fun
