@@ -24,3 +24,6 @@ jobs:
           set -euo pipefail
           test -f README.md
 
+      - name: Unsafe literal scan
+        run: |
+          ! grep -R "disable_guardrails\|can_bypass_leash" . --exclude-dir=.git --exclude-dir=.github
