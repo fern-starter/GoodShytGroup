@@ -1,0 +1,92 @@
+<svg width="1600" height="420" viewBox="0 0 1600 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1600" y2="420" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#081C15"/>
+      <stop offset="0.5" stop-color="#1B4332"/>
+      <stop offset="1" stop-color="#2D6A4F"/>
+    </linearGradient>
+
+    <linearGradient id="glowLine" x1="0" y1="0" x2="1600" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#95D5B2" stop-opacity="0"/>
+      <stop offset="0.5" stop-color="#95D5B2" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#95D5B2" stop-opacity="0"/>
+    </linearGradient>
+
+    <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="10" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <style>
+      .title { font: 700 72px Arial, sans-serif; fill: #E9F5EE; letter-spacing: 1px; }
+      .subtitle { font: 400 28px Arial, sans-serif; fill: #CFE8D8; }
+      .small { font: 400 19px Arial, sans-serif; fill: #95D5B2; }
+      .line { stroke: rgba(149,213,178,.22); stroke-width: 2; }
+      .dot { fill: #95D5B2; opacity: .85; }
+      .pulse { animation: pulse 4s ease-in-out infinite; transform-origin: center; }
+      .floatA { animation: floatA 8s ease-in-out infinite; }
+      .floatB { animation: floatB 10s ease-in-out infinite; }
+      .floatC { animation: floatC 7s ease-in-out infinite; }
+      .scan { animation: scan 6s linear infinite; }
+
+      @keyframes pulse {
+        0%, 100% { opacity: .35; }
+        50% { opacity: .95; }
+      }
+
+      @keyframes floatA {
+        0%,100% { transform: translateY(0px); }
+        50% { transform: translateY(-8px); }
+      }
+
+      @keyframes floatB {
+        0%,100% { transform: translateY(0px); }
+        50% { transform: translateY(10px); }
+      }
+
+      @keyframes floatC {
+        0%,100% { transform: translateY(0px); }
+        50% { transform: translateY(-5px); }
+      }
+
+      @keyframes scan {
+        0% { transform: translateX(-200px); opacity: 0; }
+        10% { opacity: .15; }
+        50% { opacity: .4; }
+        90% { opacity: .15; }
+        100% { transform: translateX(1800px); opacity: 0; }
+      }
+    </style>
+  </defs>
+
+  <rect width="1600" height="420" rx="28" fill="url(#bg)"/>
+
+  <g opacity="0.35">
+    <path d="M120 120C240 40 360 40 490 120" class="line"/>
+    <path d="M1110 120C1240 40 1360 40 1480 120" class="line"/>
+    <path d="M160 300C270 240 390 240 500 300" class="line"/>
+    <path d="M1100 300C1230 235 1360 240 1490 300" class="line"/>
+  </g>
+
+  <g>
+    <circle cx="150" cy="110" r="4" class="dot floatA"/>
+    <circle cx="255" cy="80" r="3.2" class="dot floatB"/>
+    <circle cx="355" cy="132" r="4.6" class="dot floatC"/>
+    <circle cx="1250" cy="90" r="4.2" class="dot floatB"/>
+    <circle cx="1350" cy="128" r="3.8" class="dot floatA"/>
+    <circle cx="1450" cy="84" r="4.8" class="dot floatC"/>
+    <circle cx="1290" cy="316" r="4" class="dot floatB"/>
+    <circle cx="1395" cy="290" r="3.6" class="dot floatA"/>
+  </g>
+
+  <g filter="url(#softGlow)">
+    <text x="800" y="180" text-anchor="middle" class="title">GoodshytGroup</text>
+    <text x="800" y="232" text-anchor="middle" class="subtitle">Software systems • AI tooling • Secure infrastructure • Automation</text>
+    <text x="800" y="276" text-anchor="middle" class="small">Explainable architecture • modular systems • trust-first engineering</text>
+  </g>
+
+  <rect x="-220" y="0" width="220" height="420" fill="url(#glowLine)" class="scan pulse"/>
+</svg>
