@@ -27,3 +27,29 @@ jobs:
       - name: Unsafe literal scan
         run: |
           ! grep -R "disable_guardrails\|can_bypass_leash" . --exclude-dir=.git --exclude-dir=.github
+
+      - name: Shell injection safety scan
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Detect unsafe direct interpolation of variables or command-substitution into
+          # gh issue/pr comment/create --body.  Model-generated content can contain $(...) or
+          # backtick sequences that the shell would execute if embedded in --body "...".
+          # Safe alternatives: pipe content via stdin or write to a temp file and use --body-file.
+          UNSAFE=0
+          # Catch $VAR / ${VAR} / $(...) expansion after --body (quoted or unquoted)
+          grep -RnE \
+            --include="*.yml" --include="*.yaml" --include="*.sh" \
+            'gh[[:space:]]+(issue|pr)[[:space:]]+(comment|create).*--body[[:space:]]+["'"'"']?\$(\(|[{]|[A-Za-z_])' \
+            . --exclude-dir=.git && UNSAFE=1 || true
+          # Catch backtick command substitution after --body (quoted or unquoted)
+          grep -RnE \
+            --include="*.yml" --include="*.yaml" --include="*.sh" \
+            'gh[[:space:]]+(issue|pr)[[:space:]]+(comment|create).*--body[[:space:]]+["'"'"']?`' \
+            . --exclude-dir=.git && UNSAFE=1 || true
+          if [ "$UNSAFE" -eq 1 ]; then
+            echo "ERROR: Unsafe model-output interpolation detected."
+            echo "       Do not pass model-generated content via --body \"\$VAR\", --body \"\$(...)\", or --body \"\`...\`\"."
+            echo "       Instead, write the content to a temp file and use --body-file, or pipe via stdin."
+            exit 1
+          fi
