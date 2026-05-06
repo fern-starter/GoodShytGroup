@@ -1,4 +1,4 @@
-# goodshyt-group
+# goodshytgroup
 Documentation for goodshyt-group
 Bumps [actions/checkout](https://github.com/actions/checkout) from 4 to 6.
 <details>
