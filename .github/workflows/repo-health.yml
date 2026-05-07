@@ -41,8 +41,8 @@ jobs:
           import sys
           import os
           command_pattern = re.compile(r"\bgh\s+(?:issue|pr)\s+(?:comment|create)\b", re.IGNORECASE)
-          body_pattern = re.compile(r"--body(?:\s+|=)(?P<body>.+)")
-          expansion_pattern = re.compile(r"`|\$\(|\$\{|\$[A-Za-z0-9_@*#?$!\-]")
+          body_pattern = re.compile(r"""--body(?:\s+|=)(?P<body>(?:'[^']*'|"[^"]*"|[^\s]+))""")
+          expansion_pattern = re.compile(r"`|\$\(|\$\{|\$[A-Za-z_][A-Za-z0-9_]*|\$[0-9]|[$@*#?!-]")
 
           def logical_lines(text: str) -> list[str]:
               lines = text.splitlines()
