@@ -52,7 +52,7 @@ jobs:
               """,
               re.IGNORECASE | re.DOTALL | re.VERBOSE,
           )
-          expansion_pattern = re.compile(r"`|\$\(|\$\{|\$[A-Za-z0-9_@*#?$!-]")
+          expansion_pattern = re.compile(r"`|\$\(|\$\{|\$[-A-Za-z0-9_@*#?$!]")
 
           def normalize(text: str) -> str:
               return re.sub(r"\\\n[ \t]*", " ", text)
