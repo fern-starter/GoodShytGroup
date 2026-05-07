@@ -33,23 +33,67 @@ jobs:
         run: |
           set -euo pipefail
           # Detect unsafe direct interpolation of variables or command-substitution into
-          # gh issue/pr comment/create --body.  Model-generated content can contain $(...) or
-          # backtick sequences that the shell would execute if embedded in --body "...".
-          # Safe alternatives: pipe content via stdin or write to a temp file and use --body-file.
-          UNSAFE=0
-          # Catch $VAR / ${VAR} / $(...) expansion after --body (quoted or unquoted)
-          grep -RnE \
-            --include="*.yml" --include="*.yaml" --include="*.sh" \
-            'gh[[:space:]]+(issue|pr)[[:space:]]+(comment|create).*--body[[:space:]]+["'"'"']?\$(\(|[{]|[A-Za-z_])' \
-            . --exclude-dir=.git && UNSAFE=1 || true
-          # Catch backtick command substitution after --body (quoted or unquoted)
-          grep -RnE \
-            --include="*.yml" --include="*.yaml" --include="*.sh" \
-            'gh[[:space:]]+(issue|pr)[[:space:]]+(comment|create).*--body[[:space:]]+["'"'"']?`' \
-            . --exclude-dir=.git && UNSAFE=1 || true
-          if [ "$UNSAFE" -eq 1 ]; then
-            echo "ERROR: Unsafe model-output interpolation detected."
-            echo "       Do not pass model-generated content via --body \"\$VAR\", --body \"\$(...)\", or --body \"\`...\`\"."
-            echo "       Instead, write the content to a temp file and use --body-file, or pipe via stdin."
+          # gh issue/pr comment/create --body / --body=. Model-generated content can contain
+          # shell payloads that execute when expanded by the shell.
+          python - <<'PY'
+          import pathlib
+          import re
+          import sys
+
+          command_pattern = re.compile(
+              r"""gh\s+(?:issue|pr)\s+(?:comment|create)\b
+                  (?:(?!--body(?:\s+|=)).)*?
+                  --body(?:\s+|=)
+                  (?P<body>
+                    "(?:[^"\\]|\\.)*" |
+                    '(?:[^'\\]|\\.)*' |
+                    [^\n;&|]+
+                  )
+              """,
+              re.IGNORECASE | re.DOTALL | re.VERBOSE,
+          )
+          expansion_pattern = re.compile(r"`|\$\(|\$\{|\$[A-Za-z0-9_@*#?$!-]")
+
+          def normalize(text: str) -> str:
+              return re.sub(r"\\\n[ \t]*", " ", text)
+
+          unsafe_hits: list[tuple[str, int, str]] = []
+          for path in pathlib.Path(".").rglob("*"):
+              if not path.is_file():
+                  continue
+              if ".git" in path.parts:
+                  continue
+              if path.suffix.lower() not in {".yml", ".yaml", ".sh"}:
+                  continue
+              content = normalize(path.read_text(encoding="utf-8", errors="ignore"))
+              for match in command_pattern.finditer(content):
+                  body = match.group("body")
+                  if expansion_pattern.search(body):
+                      line = content.count("\n", 0, match.start()) + 1
+                      snippet = " ".join(match.group(0).strip().split())
+                      unsafe_hits.append((str(path), line, snippet[:220]))
+
+          if unsafe_hits:
+              print("ERROR: Unsafe model-output interpolation detected.")
+              print("Do not pass model-generated content via --body/--body= with shell expansion.")
+              print("Use --body-file (or stdin where supported) instead.")
+              for file_path, line, snippet in unsafe_hits:
+                  print(f"{file_path}:{line}: {snippet}")
+              sys.exit(1)
+          PY
+
+      - name: Verify currently_building config is reflected in README
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f profile.config.yml
+          CONFIG_ITEMS="$(sed -n '/^currently_building:/,$p' profile.config.yml | sed -n 's/^  - /- /p')"
+          README_ITEMS="$(sed -n '/<!--START_SECTION:currently_building-->/,/<!--END_SECTION:currently_building-->/p' README.md | sed '1d;$d')"
+          if [ "$CONFIG_ITEMS" != "$README_ITEMS" ]; then
+            echo "ERROR: README currently_building section is out of sync with profile.config.yml"
+            echo "profile.config.yml:"
+            printf '%s\n' "$CONFIG_ITEMS"
+            echo "README.md:"
+            printf '%s\n' "$README_ITEMS"
             exit 1
           fi
