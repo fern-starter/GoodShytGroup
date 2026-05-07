@@ -33,23 +33,110 @@ jobs:
         run: |
           set -euo pipefail
           # Detect unsafe direct interpolation of variables or command-substitution into
-          # gh issue/pr comment/create --body.  Model-generated content can contain $(...) or
-          # backtick sequences that the shell would execute if embedded in --body "...".
-          # Safe alternatives: pipe content via stdin or write to a temp file and use --body-file.
-          UNSAFE=0
-          # Catch $VAR / ${VAR} / $(...) expansion after --body (quoted or unquoted)
-          grep -RnE \
-            --include="*.yml" --include="*.yaml" --include="*.sh" \
-            'gh[[:space:]]+(issue|pr)[[:space:]]+(comment|create).*--body[[:space:]]+["'"'"']?\$(\(|[{]|[A-Za-z_])' \
-            . --exclude-dir=.git && UNSAFE=1 || true
-          # Catch backtick command substitution after --body (quoted or unquoted)
-          grep -RnE \
-            --include="*.yml" --include="*.yaml" --include="*.sh" \
-            'gh[[:space:]]+(issue|pr)[[:space:]]+(comment|create).*--body[[:space:]]+["'"'"']?`' \
-            . --exclude-dir=.git && UNSAFE=1 || true
-          if [ "$UNSAFE" -eq 1 ]; then
-            echo "ERROR: Unsafe model-output interpolation detected."
-            echo "       Do not pass model-generated content via --body \"\$VAR\", --body \"\$(...)\", or --body \"\`...\`\"."
-            echo "       Instead, write the content to a temp file and use --body-file, or pipe via stdin."
+          # gh issue/pr comment/create --body / --body=. Model-generated content can contain
+          # shell payloads that execute when expanded by the shell.
+          python - <<'PY'
+          import pathlib
+          import re
+          import sys
+          import os
+          import shlex
+          command_pattern = re.compile(r"\bgh\s+(?:issue|pr)\s+(?:comment|create)\b", re.IGNORECASE)
+          expansion_pattern = re.compile(r"`|\$\(|\$\{|\$[A-Za-z_][A-Za-z0-9_]*|\$[0-9]|\$[@*#?!-]")
+
+          def logical_lines(text: str) -> list[str]:
+              """Return shell-like logical lines by merging trailing-backslash continuations.
+
+              Empty and comment lines are preserved as plain lines.
+              If the file ends with a trailing backslash continuation, the buffered content is returned as-is.
+              """
+              lines = text.splitlines()
+              merged: list[str] = []
+              buffer = ""
+              for raw in lines:
+                  line = raw.rstrip()
+                  if buffer:
+                      buffer = f"{buffer} {line.lstrip()}"
+                  else:
+                      buffer = line
+                  if buffer.endswith("\\"):
+                      buffer = buffer[:-1].rstrip()
+                      continue
+                  merged.append(buffer)
+                  buffer = ""
+              if buffer:
+                  merged.append(buffer)
+              return merged
+
+          unsafe_hits: list[tuple[str, int, str]] = []
+          for root, dirs, files in os.walk("."):
+              dirs[:] = [d for d in dirs if d != ".git"]
+              for filename in files:
+                  path = pathlib.Path(root) / filename
+                  if path.suffix.lower() not in {".yml", ".yaml", ".sh"}:
+                      continue
+                  content = path.read_text(encoding="utf-8", errors="replace")
+                  for line_number, line in enumerate(logical_lines(content), start=1):
+                      if not command_pattern.search(line):
+                          continue
+                      try:
+                          tokens = shlex.split(line, posix=True)
+                      except ValueError:
+                          print(f"WARNING: Unable to parse shell tokens in {path}:{line_number}", file=sys.stderr)
+                          continue
+                      body = None
+                      for index, token in enumerate(tokens):
+                          if token == "--body" and index + 1 < len(tokens):
+                              body = tokens[index + 1]
+                              break
+                          if token.startswith("--body="):
+                              body = token.split("=", 1)[1]
+                              break
+                      if body is None:
+                          continue
+                      if expansion_pattern.search(body):
+                          snippet = " ".join(line.strip().split())
+                          if len(snippet) > 220:
+                              snippet = f"{snippet[:217]}..."
+                          unsafe_hits.append((str(path), line_number, snippet))
+
+          if unsafe_hits:
+              print("ERROR: Unsafe model-output interpolation detected.")
+              print("Do not pass model-generated content via --body/--body= with shell expansion.")
+              print("Use --body-file (or stdin where supported) instead.")
+              for file_path, line, snippet in unsafe_hits:
+                  print(f"{file_path}:{line}: {snippet}")
+              sys.exit(1)
+          PY
+
+      - name: Verify currently_building config is reflected in README
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f profile.config.yml
+          if ! grep -qE '^currently_building:[[:space:]]*$' profile.config.yml; then
+            echo "ERROR: profile.config.yml is missing a currently_building section header"
+            exit 1
+          fi
+          CONFIG_ITEMS="$(awk '
+            /^currently_building:[[:space:]]*$/ { in_section=1; next }
+            in_section && /^[[:space:]]*-[[:space:]]+/ {
+              sub(/^[[:space:]]*-[[:space:]]+/, "- ")
+              print
+              next
+            }
+            in_section && /^[^[:space:]]/ { exit }
+          ' profile.config.yml)"
+          README_ITEMS="$(sed -n '/<!--START_SECTION:currently_building-->/,/<!--END_SECTION:currently_building-->/p' README.md | sed '1d;$d')"
+          if [ -z "$CONFIG_ITEMS" ] || [ -z "$README_ITEMS" ]; then
+            echo "ERROR: Unable to extract currently_building items from profile.config.yml or README.md"
+            exit 1
+          fi
+          if [ "$CONFIG_ITEMS" != "$README_ITEMS" ]; then
+            echo "ERROR: README currently_building section is out of sync with profile.config.yml"
+            echo "profile.config.yml:"
+            printf '%s\n' "$CONFIG_ITEMS"
+            echo "README.md:"
+            printf '%s\n' "$README_ITEMS"
             exit 1
           fi
