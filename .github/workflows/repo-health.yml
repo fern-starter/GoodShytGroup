@@ -45,6 +45,7 @@ jobs:
           expansion_pattern = re.compile(r"`|\$\(|\$\{|\$[A-Za-z_][A-Za-z0-9_]*|\$[0-9]|\$[@*#?!-]")
 
           def logical_lines(text: str) -> list[str]:
+              """Merge shell-style backslash continuations into parseable logical lines."""
               lines = text.splitlines()
               merged: list[str] = []
               buffer = ""
@@ -70,7 +71,7 @@ jobs:
                   path = pathlib.Path(root) / filename
                   if path.suffix.lower() not in {".yml", ".yaml", ".sh"}:
                       continue
-                  content = path.read_text(encoding="utf-8", errors="ignore")
+                  content = path.read_text(encoding="utf-8", errors="replace")
                   for line_number, line in enumerate(logical_lines(content), start=1):
                       if not command_pattern.search(line):
                           continue
@@ -90,6 +91,8 @@ jobs:
                           continue
                       if expansion_pattern.search(body):
                           snippet = " ".join(line.strip().split())
+                          if len(snippet) > 220:
+                              snippet = f"{snippet[:217]}..."
                           unsafe_hits.append((str(path), line_number, snippet[:220]))
 
           if unsafe_hits:
