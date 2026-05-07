@@ -45,7 +45,11 @@ jobs:
           expansion_pattern = re.compile(r"`|\$\(|\$\{|\$[A-Za-z_][A-Za-z0-9_]*|\$[0-9]|\$[@*#?!-]")
 
           def logical_lines(text: str) -> list[str]:
-              """Merge shell-style backslash continuations into parseable logical lines."""
+              """Return shell-like logical lines by merging trailing-backslash continuations.
+
+              Empty and comment lines are preserved as plain lines.
+              If the file ends with a trailing backslash continuation, the buffered content is returned as-is.
+              """
               lines = text.splitlines()
               merged: list[str] = []
               buffer = ""
@@ -78,6 +82,7 @@ jobs:
                       try:
                           tokens = shlex.split(line, posix=True)
                       except ValueError:
+                          print(f"WARNING: Unable to parse shell tokens in {path}:{line_number}", file=sys.stderr)
                           continue
                       body = None
                       for index, token in enumerate(tokens):
@@ -109,6 +114,10 @@ jobs:
         run: |
           set -euo pipefail
           test -f profile.config.yml
+          if ! grep -qE '^currently_building:[[:space:]]*$' profile.config.yml; then
+            echo "ERROR: profile.config.yml is missing a currently_building section header"
+            exit 1
+          fi
           CONFIG_ITEMS="$(awk '
             /^currently_building:[[:space:]]*$/ { in_section=1; next }
             in_section && /^[[:space:]]*-[[:space:]]+/ {
