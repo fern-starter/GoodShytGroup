@@ -40,9 +40,9 @@ jobs:
           import re
           import sys
           import os
+          import shlex
           command_pattern = re.compile(r"\bgh\s+(?:issue|pr)\s+(?:comment|create)\b", re.IGNORECASE)
-          body_pattern = re.compile(r"""--body(?:\s+|=)(?P<body>(?:'[^']*'|"[^"]*"|[^\s]+))""")
-          expansion_pattern = re.compile(r"`|\$\(|\$\{|\$[A-Za-z_][A-Za-z0-9_]*|\$[0-9]|[$@*#?!-]")
+          expansion_pattern = re.compile(r"`|\$\(|\$\{|\$[A-Za-z_][A-Za-z0-9_]*|\$[0-9]|\$[@*#?!-]")
 
           def logical_lines(text: str) -> list[str]:
               lines = text.splitlines()
@@ -74,10 +74,20 @@ jobs:
                   for line_number, line in enumerate(logical_lines(content), start=1):
                       if not command_pattern.search(line):
                           continue
-                      body_match = body_pattern.search(line)
-                      if not body_match:
+                      try:
+                          tokens = shlex.split(line, posix=True)
+                      except ValueError:
                           continue
-                      body = body_match.group("body")
+                      body = None
+                      for index, token in enumerate(tokens):
+                          if token == "--body" and index + 1 < len(tokens):
+                              body = tokens[index + 1]
+                              break
+                          if token.startswith("--body="):
+                              body = token.split("=", 1)[1]
+                              break
+                      if body is None:
+                          continue
                       if expansion_pattern.search(body):
                           snippet = " ".join(line.strip().split())
                           unsafe_hits.append((str(path), line_number, snippet[:220]))
@@ -96,7 +106,15 @@ jobs:
         run: |
           set -euo pipefail
           test -f profile.config.yml
-          CONFIG_ITEMS="$(sed -n '/^currently_building:/,$p' profile.config.yml | sed -n 's/^  - /- /p')"
+          CONFIG_ITEMS="$(awk '
+            /^currently_building:[[:space:]]*$/ { in_section=1; next }
+            in_section && /^[[:space:]]*-[[:space:]]+/ {
+              sub(/^[[:space:]]*-[[:space:]]+/, "- ")
+              print
+              next
+            }
+            in_section && /^[^[:space:]]/ { in_section=0 }
+          ' profile.config.yml)"
           README_ITEMS="$(sed -n '/<!--START_SECTION:currently_building-->/,/<!--END_SECTION:currently_building-->/p' README.md | sed '1d;$d')"
           if [ -z "$CONFIG_ITEMS" ] || [ -z "$README_ITEMS" ]; then
             echo "ERROR: Unable to extract currently_building items from profile.config.yml or README.md"
