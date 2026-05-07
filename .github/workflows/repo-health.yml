@@ -93,7 +93,7 @@ jobs:
                           snippet = " ".join(line.strip().split())
                           if len(snippet) > 220:
                               snippet = f"{snippet[:217]}..."
-                          unsafe_hits.append((str(path), line_number, snippet[:220]))
+                          unsafe_hits.append((str(path), line_number, snippet))
 
           if unsafe_hits:
               print("ERROR: Unsafe model-output interpolation detected.")
@@ -116,7 +116,7 @@ jobs:
               print
               next
             }
-            in_section && /^[^[:space:]]/ { in_section=0 }
+            in_section && /^[^[:space:]]/ { exit }
           ' profile.config.yml)"
           README_ITEMS="$(sed -n '/<!--START_SECTION:currently_building-->/,/<!--END_SECTION:currently_building-->/p' README.md | sed '1d;$d')"
           if [ -z "$CONFIG_ITEMS" ] || [ -z "$README_ITEMS" ]; then
