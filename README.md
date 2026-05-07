@@ -1,165 +1,205 @@
-# goodshytgroup
-Documentation for goodshyt-group
-Bumps [actions/checkout](https://github.com/actions/checkout) from 4 to 6.
-<details>
-<summary>Release notes</summary>
-<p><em>Sourced from <a href="https://github.com/actions/checkout/releases">actions/checkout's releases</a>.</em></p>
-<blockquote>
-<h2>v6.0.0</h2>
-<h2>What's Changed</h2>
-<ul>
-<li>Update README to include Node.js 24 support details and requirements by <a href="https://github.com/salmanmkc"><code>@​salmanmkc</code></a> in <a href="https://redirect.github.com/actions/checkout/pull/2248">actions/checkout#2248</a></li>
-<li>Persist creds to a separate file by <a href="https://github.com/ericsciple"><code>@​ericsciple</code></a> in <a href="https://redirect.github.com/actions/checkout/pull/2286">actions/checkout#2286</a></li>
-<li>v6-beta by <a href="https://github.com/ericsciple"><code>@​ericsciple</code></a> in <a href="https://redirect.github.com/actions/checkout/pull/2298">actions/checkout#2298</a></li>
-<li>update readme/changelog for v6 by <a href="https://github.com/ericsciple"><code>@​ericsciple</code></a> in <a href="https://redirect.github.com/actions/checkout/pull/2311">actions/checkout#2311</a></li>
-</ul>
-<p><strong>Full Changelog</strong>: <a href="https://github.com/actions/checkout/compare/v5.0.0...v6.0.0">https://github.com/actions/checkout/compare/v5.0.0...v6.0.0</a></p>
-<h2>v6-beta</h2>
-<h2>What's Changed</h2>
-<p>Updated persist-credentials to store the credentials under <code>$RUNNER_TEMP</code> instead of directly in the local git config.</p>
-<p>This requires a minimum Actions Runner version of <a href="https://github.com/actions/runner/releases/tag/v2.329.0">v2.329.0</a> to access the persisted credentials for <a href="https://docs.github.com/en/actions/tutorials/use-containerized-services/create-a-docker-container-action">Docker container action</a> scenarios.</p>
-<h2>v5.0.1</h2>
-<h2>What's Changed</h2>
-<ul>
-<li>Port v6 cleanup to v5 by <a href="https://github.com/ericsciple"><code>@​ericsciple</code></a> in <a href="https://redirect.github.com/actions/checkout/pull/2301">actions/checkout#2301</a></li>
-</ul>
-<p><strong>Full Changelog</strong>: <a href="https://github.com/actions/checkout/compare/v5...v5.0.1">https://github.com/actions/checkout/compare/v5...v5.0.1</a></p>
-<h2>v5.0.0</h2>
-<h2>What's Changed</h2>
-<ul>
-<li>Update actions checkout to use node 24 by <a href="https://github.com/salmanmkc"><code>@​salmanmkc</code></a> in <a href="https://redirect.github.com/actions/checkout/pull/2226">actions/checkout#2226</a></li>
-<li>Prepare v5.0.0 release by <a href="https://github.com/salmanmkc"><code>@​salmanmkc</code></a> in <a href="https://redirect.github.com/actions/checkout/pull/2238">actions/checkout#2238</a></li>
-</ul>
-<h2>⚠️ Minimum Compatible Runner Version</h2>
-<p><strong>v2.327.1</strong><br />
-<a href="https://github.com/actions/runner/releases/tag/v2.327.1">Release Notes</a></p>
-<p>Make sure your runner is updated to this version or newer to use this release.</p>
-<p><strong>Full Changelog</strong>: <a href="https://github.com/actions/checkout/compare/v4...v5.0.0">https://github.com/actions/checkout/compare/v4...v5.0.0</a></p>
-<h2>v4.3.1</h2>
-<h2>What's Changed</h2>
-<ul>
-<li>Port v6 cleanup to v4 by <a href="https://github.com/ericsciple"><code>@​ericsciple</code></a> in <a href="https://redirect.github.com/actions/checkout/pull/2305">actions/checkout#2305</a></li>
-</ul>
-<p><strong>Full Changelog</strong>: <a href="https://github.com/actions/checkout/compare/v4...v4.3.1">https://github.com/actions/checkout/compare/v4...v4.3.1</a></p>
-<h2>v4.3.0</h2>
-<h2>What's Changed</h2>
-<ul>
-<li>docs: update README.md by <a href="https://github.com/motss"><code>@​motss</code></a> in <a href="https://redirect.github.com/actions/checkout/pull/1971">actions/checkout#1971</a></li>
-<li>Add internal repos for checking out multiple repositories by <a href="https://github.com/mouismail"><code>@​mouismail</code></a> in <a href="https://redirect.github.com/actions/checkout/pull/1977">actions/checkout#1977</a></li>
-<li>Documentation update - add recommended permissions to Readme by <a href="https://github.com/benwells"><code>@​benwells</code></a> in <a href="https://redirect.github.com/actions/checkout/pull/2043">actions/checkout#2043</a></li>
-</ul>
-<!-- raw HTML omitted -->
-</blockquote>
-<p>... (truncated)</p>
-</details>
-<details>
-<summary>Changelog</summary>
-<p><em>Sourced from <a href="https://github.com/actions/checkout/blob/main/CHANGELOG.md">actions/checkout's changelog</a>.</em></p>
-<blockquote>
-<h1>Changelog</h1>
-<h2>v6.0.2</h2>
-<ul>
-<li>Fix tag handling: preserve annotations and explicit fetch-tags by <a href="https://github.com/ericsciple"><code>@​ericsciple</code></a> in <a href="https://redirect.github.com/actions/checkout/pull/2356">actions/checkout#2356</a></li>
-</ul>
-<h2>v6.0.1</h2>
-<ul>
-<li>Add worktree support for persist-credentials includeIf by <a href="https://github.com/ericsciple"><code>@​ericsciple</code></a> in <a href="https://redirect.github.com/actions/checkout/pull/2327">actions/checkout#2327</a></li>
-</ul>
-<h2>v6.0.0</h2>
-<ul>
-<li>Persist creds to a separate file by <a href="https://github.com/ericsciple"><code>@​ericsciple</code></a> in <a href="https://redirect.github.com/actions/checkout/pull/2286">actions/checkout#2286</a></li>
-<li>Update README to include Node.js 24 support details and requirements by <a href="https://github.com/salmanmkc"><code>@​salmanmkc</code></a> in <a href="https://redirect.github.com/actions/checkout/pull/2248">actions/checkout#2248</a></li>
-</ul>
-<h2>v5.0.1</h2>
-<ul>
-<li>Port v6 cleanup to v5 by <a href="https://github.com/ericsciple"><code>@​ericsciple</code></a> in <a href="https://redirect.github.com/actions/checkout/pull/2301">actions/checkout#2301</a></li>
-</ul>
-<h2>v5.0.0</h2>
-<ul>
-<li>Update actions checkout to use node 24 by <a href="https://github.com/salmanmkc"><code>@​salmanmkc</code></a> in <a href="https://redirect.github.com/actions/checkout/pull/2226">actions/checkout#2226</a></li>
-</ul>
-<h2>v4.3.1</h2>
-<ul>
-<li>Port v6 cleanup to v4 by <a href="https://github.com/ericsciple"><code>@​ericsciple</code></a> in <a href="https://redirect.github.com/actions/checkout/pull/2305">actions/checkout#2305</a></li>
-</ul>
-<h2>v4.3.0</h2>
-<ul>
-<li>docs: update README.md by <a href="https://github.com/motss"><code>@​motss</code></a> in <a href="https://redirect.github.com/actions/checkout/pull/1971">actions/checkout#1971</a></li>
-<li>Add internal repos for checking out multiple repositories by <a href="https://github.com/mouismail"><code>@​mouismail</code></a> in <a href="https://redirect.github.com/actions/checkout/pull/1977">actions/checkout#1977</a></li>
-<li>Documentation update - add recommended permissions to Readme by <a href="https://github.com/benwells"><code>@​benwells</code></a> in <a href="https://redirect.github.com/actions/checkout/pull/2043">actions/checkout#2043</a></li>
-<li>Adjust positioning of user email note and permissions heading by <a href="https://github.com/joshmgross"><code>@​joshmgross</code></a> in <a href="https://redirect.github.com/actions/checkout/pull/2044">actions/checkout#2044</a></li>
-<li>Update README.md by <a href="https://github.com/nebuk89"><code>@​nebuk89</code></a> in <a href="https://redirect.github.com/actions/checkout/pull/2194">actions/checkout#2194</a></li>
-<li>Update CODEOWNERS for actions by <a href="https://github.com/TingluoHuang"><code>@​TingluoHuang</code></a> in <a href="https://redirect.github.com/actions/checkout/pull/2224">actions/checkout#2224</a></li>
-<li>Update package dependencies by <a href="https://github.com/salmanmkc"><code>@​salmanmkc</code></a> in <a href="https://redirect.github.com/actions/checkout/pull/2236">actions/checkout#2236</a></li>
-</ul>
-<h2>v4.2.2</h2>
-<ul>
-<li><code>url-helper.ts</code> now leverages well-known environment variables by <a href="https://github.com/jww3"><code>@​jww3</code></a> in <a href="https://redirect.github.com/actions/checkout/pull/1941">actions/checkout#1941</a></li>
-<li>Expand unit test coverage for <code>isGhes</code> by <a href="https://github.com/jww3"><code>@​jww3</code></a> in <a href="https://redirect.github.com/actions/checkout/pull/1946">actions/checkout#1946</a></li>
-</ul>
-<h2>v4.2.1</h2>
-<ul>
-<li>Check out other refs/* by commit if provided, fall back to ref by <a href="https://github.com/orhantoy"><code>@​orhantoy</code></a> in <a href="https://redirect.github.com/actions/checkout/pull/1924">actions/checkout#1924</a></li>
-</ul>
-<h2>v4.2.0</h2>
-<ul>
-<li>Add Ref and Commit outputs by <a href="https://github.com/lucacome"><code>@​lucacome</code></a> in <a href="https://redirect.github.com/actions/checkout/pull/1180">actions/checkout#1180</a></li>
-<li>Dependency updates by <a href="https://github.com/dependabot"><code>@​dependabot</code></a>- <a href="https://redirect.github.com/actions/checkout/pull/1777">actions/checkout#1777</a>, <a href="https://redirect.github.com/actions/checkout/pull/1872">actions/checkout#1872</a></li>
-</ul>
-<h2>v4.1.7</h2>
-<ul>
-<li>Bump the minor-npm-dependencies group across 1 directory with 4 updates by <a href="https://github.com/dependabot"><code>@​dependabot</code></a> in <a href="https://redirect.github.com/actions/checkout/pull/1739">actions/checkout#1739</a></li>
-<li>Bump actions/checkout from 3 to 4 by <a href="https://github.com/dependabot"><code>@​dependabot</code></a> in <a href="https://redirect.github.com/actions/checkout/pull/1697">actions/checkout#1697</a></li>
-<li>Check out other refs/* by commit by <a href="https://github.com/orhantoy"><code>@​orhantoy</code></a> in <a href="https://redirect.github.com/actions/checkout/pull/1774">actions/checkout#1774</a></li>
-<li>Pin actions/checkout's own workflows to a known, good, stable version. by <a href="https://github.com/jww3"><code>@​jww3</code></a> in <a href="https://redirect.github.com/actions/checkout/pull/1776">actions/checkout#1776</a></li>
-</ul>
-<h2>v4.1.6</h2>
-<ul>
-<li>Check platform to set archive extension appropriately by <a href="https://github.com/cory-miller"><code>@​cory-miller</code></a> in <a href="https://redirect.github.com/actions/checkout/pull/1732">actions/checkout#1732</a></li>
-</ul>
-<!-- raw HTML omitted -->
-</blockquote>
-<p>... (truncated)</p>
-</details>
-<details>
-<summary>Commits</summary>
-<ul>
-<li><a href="https://github.com/actions/checkout/commit/de0fac2e4500dabe0009e67214ff5f5447ce83dd"><code>de0fac2</code></a> Fix tag handling: preserve annotations and explicit fetch-tags (<a href="https://redirect.github.com/actions/checkout/issues/2356">#2356</a>)</li>
-<li><a href="https://github.com/actions/checkout/commit/064fe7f3312418007dea2b49a19844a9ee378f49"><code>064fe7f</code></a> Add orchestration_id to git user-agent when ACTIONS_ORCHESTRATION_ID is set (...</li>
-<li><a href="https://github.com/actions/checkout/commit/8e8c483db84b4bee98b60c0593521ed34d9990e8"><code>8e8c483</code></a> Clarify v6 README (<a href="https://redirect.github.com/actions/checkout/issues/2328">#2328</a>)</li>
-<li><a href="https://github.com/actions/checkout/commit/033fa0dc0b82693d8986f1016a0ec2c5e7d9cbb1"><code>033fa0d</code></a> Add worktree support for persist-credentials includeIf (<a href="https://redirect.github.com/actions/checkout/issues/2327">#2327</a>)</li>
-<li><a href="https://github.com/actions/checkout/commit/c2d88d3ecc89a9ef08eebf45d9637801dcee7eb5"><code>c2d88d3</code></a> Update all references from v5 and v4 to v6 (<a href="https://redirect.github.com/actions/checkout/issues/2314">#2314</a>)</li>
-<li><a href="https://github.com/actions/checkout/commit/1af3b93b6815bc44a9784bd300feb67ff0d1eeb3"><code>1af3b93</code></a> update readme/changelog for v6 (<a href="https://redirect.github.com/actions/checkout/issues/2311">#2311</a>)</li>
-<li><a href="https://github.com/actions/checkout/commit/71cf2267d89c5cb81562390fa70a37fa40b1305e"><code>71cf226</code></a> v6-beta (<a href="https://redirect.github.com/actions/checkout/issues/2298">#2298</a>)</li>
-<li><a href="https://github.com/actions/checkout/commit/069c6959146423d11cd0184e6accf28f9d45f06e"><code>069c695</code></a> Persist creds to a separate file (<a href="https://redirect.github.com/actions/checkout/issues/2286">#2286</a>)</li>
-<li><a href="https://github.com/actions/checkout/commit/ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493"><code>ff7abcd</code></a> Update README to include Node.js 24 support details and requirements (<a href="https://redirect.github.com/actions/checkout/issues/2248">#2248</a>)</li>
-<li><a href="https://github.com/actions/checkout/commit/08c6903cd8c0fde910a37f88322edcfb5dd907a8"><code>08c6903</code></a> Prepare v5.0.0 release (<a href="https://redirect.github.com/actions/checkout/issues/2238">#2238</a>)</li>
-<li>Additional commits viewable in <a href="https://github.com/actions/checkout/compare/v4...v6">compare view</a></li>
-</ul>
-</details>
-<br />
+<div align="center">
 
+<img src="./assets/header.svg" alt="GoodshytGroup header" width="100%" />
 
-[![Dependabot compatibility score](https://dependabot-badges.githubapp.com/badges/compatibility_score?dependency-name=actions/checkout&package-manager=github_actions&previous-version=4&new-version=6)](https://docs.github.com/en/github/managing-security-vulnerabilities/about-dependabot-security-updates#about-compatibility-scores)
+# GoodshytGroup
 
-Dependabot will resolve any conflicts with this PR as long as you don't alter it yourself. You can also trigger a rebase manually by commenting `@dependabot rebase`.
+**Trust-first systems across AI, security, hardware, automation, and developer tooling.**
 
-[//]: # (dependabot-automerge-start)
-[//]: # (dependabot-automerge-end)
+<p>
+  <img src="https://img.shields.io/github/followers/GoodshytGroup?style=for-the-badge&logo=github&color=2D6A4F&labelColor=081C15" alt="followers" />
+  <img src="https://img.shields.io/badge/Open%20Source-Active-95D5B2?style=for-the-badge&labelColor=081C15" alt="open source" />
+  <img src="https://img.shields.io/badge/Focus-AI%20%7C%20Security%20%7C%20Automation-A3B18A?style=for-the-badge&labelColor=081C15" alt="focus" />
+  <img src="https://img.shields.io/badge/Build-Systems%20Engineer-BC6C25?style=for-the-badge&labelColor=081C15" alt="role" />
+</p>
+
+<p>
+  <a href="https://github.com/GoodshytGroup">
+    <img src="https://img.shields.io/badge/Profile-GitHub-1B4332?style=for-the-badge&logo=github" alt="profile" />
+  </a>
+  <a href="https://github.com/GoodshytGroup/Better-README">
+    <img src="https://img.shields.io/badge/Docs-Better--README-2D6A4F?style=for-the-badge&logo=github" alt="better readme" />
+  </a>
+</p>
+
+</div>
 
 ---
 
-<details>
-<summary>Dependabot commands and options</summary>
-<br />
+## Overview
 
-You can trigger Dependabot actions by commenting on this PR:
-- `@dependabot rebase` will rebase this PR
-- `@dependabot recreate` will recreate this PR, overwriting any edits that have been made to it
-- `@dependabot show <dependency name> ignore conditions` will show all of the ignore conditions of the specified dependency
-- `@dependabot ignore this major version` will close this PR and stop Dependabot creating any more for this major version (unless you reopen the PR or upgrade to it yourself)
-- `@dependabot ignore this minor version` will close this PR and stop Dependabot creating any more for this minor version (unless you reopen the PR or upgrade to it yourself)
-- `@dependabot ignore this dependency` will close this PR and stop Dependabot creating any more for this dependency (unless you reopen the PR or upgrade to it yourself)
+GoodshytGroup builds modular software systems focused on:
 
+- **AI reasoning and judgment workflows**
+- **secure infrastructure and policy-driven architecture**
+- **hardware and human-machine interaction**
+- **verification and analysis pipelines**
+- **automation, developer tooling, and documentation systems**
 
-</details>
+The portfolio is centered on systems that are **explainable, resilient, structured, and practical to deploy**.
+
+---
+
+## What I build
+
+- AI reasoning engines with evidence-based evaluation
+- Secure service layers and trust-first architecture
+- Human-machine interface systems and gesture tooling
+- Verification, OSINT, and structured analysis pipelines
+- Automation for publishing, scheduling, and workflow orchestration
+- README systems, reusable templates, and developer experience tooling
+
+---
+
+## Tech stack
+
+<p align="center">
+  <img src="https://skillicons.dev/icons?i=rust,python,cpp,react,nextjs,fastapi,docker,linux,githubactions,postgres,tailwind,vite,ts,js,git,github" alt="tech stack icons" />
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Rust-2D6A4F?style=flat-square&logo=rust&logoColor=white" alt="Rust" />
+  <img src="https://img.shields.io/badge/Python-95D5B2?style=flat-square&logo=python&logoColor=081C15" alt="Python" />
+  <img src="https://img.shields.io/badge/C%2B%2B-1B4332?style=flat-square&logo=cplusplus&logoColor=white" alt="C++" />
+  <img src="https://img.shields.io/badge/FastAPI-A3B18A?style=flat-square&logo=fastapi&logoColor=081C15" alt="FastAPI" />
+  <img src="https://img.shields.io/badge/Docker-1B4332?style=flat-square&logo=docker&logoColor=white" alt="Docker" />
+  <img src="https://img.shields.io/badge/GitHub%20Actions-2D6A4F?style=flat-square&logo=githubactions&logoColor=white" alt="GitHub Actions" />
+</p>
+
+---
+
+## Architecture map
+
+```mermaid
+flowchart TD
+  A[GoodshytGroup] --> B[AI Reasoning]
+  A --> C[Security Infrastructure]
+  A --> D[Hardware + HMI]
+  A --> E[Verification + Analysis]
+  A --> F[Automation Pipelines]
+  A --> G[Developer Tooling]
+
+  B --> B1[Judgment Engines]
+  B --> B2[Explainable Inference]
+  B --> B3[Evidence Workflows]
+
+  C --> C1[Policy Layers]
+  C --> C2[Secure Services]
+  C --> C3[Trust-First Systems]
+
+  D --> D1[Gesture SDKs]
+  D --> D2[Low-Latency Input]
+  D --> D3[Hardware Adapters]
+
+  E --> E1[Claim Verification]
+  E --> E2[OSINT Pipelines]
+  E --> E3[Structured Analysis]
+
+  F --> F1[Publishing Automation]
+  F --> F2[Workflow Orchestration]
+  F --> F3[Operational Tooling]
+
+  G --> G1[README Systems]
+  G --> G2[Templates]
+  G --> G3[Profile Components]
+```
+
+---
+
+## Featured projects
+
+<div align="center">
+
+<a href="https://github.com/GoodshytGroup/judgment-engine-v1">
+  <img src="https://github-readme-stats.vercel.app/api/pin/?username=GoodshytGroup&repo=judgment-engine-v1&theme=dark&hide_border=true&bg_color=081C15&title_color=95D5B2&text_color=E9F5EE&icon_color=2D6A4F" alt="judgment-engine-v1" />
+</a>
+
+<a href="https://github.com/GoodshytGroup/Better-README">
+  <img src="https://github-readme-stats.vercel.app/api/pin/?username=GoodshytGroup&repo=Better-README&theme=dark&hide_border=true&bg_color=081C15&title_color=95D5B2&text_color=E9F5EE&icon_color=2D6A4F" alt="Better-README" />
+</a>
+
+<a href="https://github.com/GoodshytGroup/octatouch-sdk-core">
+  <img src="https://github-readme-stats.vercel.app/api/pin/?username=GoodshytGroup&repo=octatouch-sdk-core&theme=dark&hide_border=true&bg_color=081C15&title_color=95D5B2&text_color=E9F5EE&icon_color=2D6A4F" alt="octatouch-sdk-core" />
+</a>
+
+<a href="https://github.com/GoodshytGroup/aeon-sentinel">
+  <img src="https://github-readme-stats.vercel.app/api/pin/?username=GoodshytGroup&repo=aeon-sentinel&theme=dark&hide_border=true&bg_color=081C15&title_color=95D5B2&text_color=E9F5EE&icon_color=2D6A4F" alt="aeon-sentinel" />
+</a>
+
+<a href="https://github.com/GoodshytGroup/celestial">
+  <img src="https://github-readme-stats.vercel.app/api/pin/?username=GoodshytGroup&repo=celestial&theme=dark&hide_border=true&bg_color=081C15&title_color=95D5B2&text_color=E9F5EE&icon_color=2D6A4F" alt="celestial" />
+</a>
+
+<a href="https://github.com/GoodshytGroup/phaseform">
+  <img src="https://github-readme-stats.vercel.app/api/pin/?username=GoodshytGroup&repo=phaseform&theme=dark&hide_border=true&bg_color=081C15&title_color=95D5B2&text_color=E9F5EE&icon_color=2D6A4F" alt="phaseform" />
+</a>
+
+</div>
+
+---
+
+## Current focus
+
+- Building stronger reasoning workflows
+- Improving secure-by-default service patterns
+- Refining documentation systems and profile tooling
+- Expanding automation across build, release, and publishing flows
+
+---
+
+## Currently building
+
+<!--START_SECTION:currently_building-->
+- Judgment and inference systems
+- Security-first service tooling
+- Better profile and README infrastructure
+- Community-focused automation systems
+<!--END_SECTION:currently_building-->
+
+---
+
+## Live signals
+
+<p align="center">
+  <img src="https://github-readme-stats.vercel.app/api?username=GoodshytGroup&show_icons=true&theme=dark&hide_border=true&bg_color=081C15&title_color=95D5B2&text_color=E9F5EE&icon_color=2D6A4F" alt="GitHub stats" />
+  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=GoodshytGroup&layout=compact&theme=dark&hide_border=true&bg_color=081C15&title_color=95D5B2&text_color=E9F5EE" alt="Top languages" />
+</p>
+
+<p align="center">
+  <img src="https://github-readme-streak-stats.herokuapp.com/?user=GoodshytGroup&theme=dark&background=081C15&ring=2D6A4F&fire=A3B18A&currStreakLabel=95D5B2&hide_border=true" alt="streak stats" />
+</p>
+
+---
+
+## Profile signals
+
+<p align="center">
+  <img src="https://komarev.com/ghpvc/?username=GoodshytGroup&style=for-the-badge&color=2D6A4F" alt="profile views" />
+  <img src="https://img.shields.io/github/stars/GoodshytGroup/Better-README?style=for-the-badge&color=95D5B2&labelColor=081C15" alt="Better-README stars" />
+  <img src="https://img.shields.io/github/last-commit/GoodshytGroup/Better-README?style=for-the-badge&color=A3B18A&labelColor=081C15" alt="last commit" />
+</p>
+
+---
+
+## Engineering style
+
+I like systems that are:
+
+- modular
+- explainable
+- policy-aware
+- testable
+- reusable
+- built to scale cleanly
+
+Most projects are structured with clear boundaries between **core logic**, **policy**, **interfaces**, and **automation**.
+
+---
+
+## Connect
+
+<p align="center">
+  <a href="https://github.com/GoodshytGroup">
+    <img src="https://img.shields.io/badge/GitHub-GoodshytGroup-1B4332?style=for-the-badge&logo=github" alt="GitHub" />
+  </a>
+</p>
