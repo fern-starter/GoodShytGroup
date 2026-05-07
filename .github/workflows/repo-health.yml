@@ -39,39 +39,48 @@ jobs:
           import pathlib
           import re
           import sys
+          import os
+          command_pattern = re.compile(r"\bgh\s+(?:issue|pr)\s+(?:comment|create)\b", re.IGNORECASE)
+          body_pattern = re.compile(r"--body(?:\s+|=)(?P<body>.+)")
+          expansion_pattern = re.compile(r"`|\$\(|\$\{|\$[A-Za-z0-9_@*#?$!\-]")
 
-          command_pattern = re.compile(
-              r"""gh\s+(?:issue|pr)\s+(?:comment|create)\b
-                  (?:(?!--body(?:\s+|=)).)*?
-                  --body(?:\s+|=)
-                  (?P<body>
-                    "(?:[^"\\]|\\.)*" |
-                    '(?:[^'\\]|\\.)*' |
-                    [^\n;&|]+
-                  )
-              """,
-              re.IGNORECASE | re.DOTALL | re.VERBOSE,
-          )
-          expansion_pattern = re.compile(r"`|\$\(|\$\{|\$[-A-Za-z0-9_@*#?$!]")
-
-          def normalize(text: str) -> str:
-              return re.sub(r"\\\n[ \t]*", " ", text)
+          def logical_lines(text: str) -> list[str]:
+              lines = text.splitlines()
+              merged: list[str] = []
+              buffer = ""
+              for raw in lines:
+                  line = raw.rstrip()
+                  if buffer:
+                      buffer = f"{buffer} {line.lstrip()}"
+                  else:
+                      buffer = line
+                  if buffer.endswith("\\"):
+                      buffer = buffer[:-1].rstrip()
+                      continue
+                  merged.append(buffer)
+                  buffer = ""
+              if buffer:
+                  merged.append(buffer)
+              return merged
 
           unsafe_hits: list[tuple[str, int, str]] = []
-          for path in pathlib.Path(".").rglob("*"):
-              if not path.is_file():
-                  continue
-              if ".git" in path.parts:
-                  continue
-              if path.suffix.lower() not in {".yml", ".yaml", ".sh"}:
-                  continue
-              content = normalize(path.read_text(encoding="utf-8", errors="ignore"))
-              for match in command_pattern.finditer(content):
-                  body = match.group("body")
-                  if expansion_pattern.search(body):
-                      line = content.count("\n", 0, match.start()) + 1
-                      snippet = " ".join(match.group(0).strip().split())
-                      unsafe_hits.append((str(path), line, snippet[:220]))
+          for root, dirs, files in os.walk("."):
+              dirs[:] = [d for d in dirs if d != ".git"]
+              for filename in files:
+                  path = pathlib.Path(root) / filename
+                  if path.suffix.lower() not in {".yml", ".yaml", ".sh"}:
+                      continue
+                  content = path.read_text(encoding="utf-8", errors="ignore")
+                  for line_number, line in enumerate(logical_lines(content), start=1):
+                      if not command_pattern.search(line):
+                          continue
+                      body_match = body_pattern.search(line)
+                      if not body_match:
+                          continue
+                      body = body_match.group("body")
+                      if expansion_pattern.search(body):
+                          snippet = " ".join(line.strip().split())
+                          unsafe_hits.append((str(path), line_number, snippet[:220]))
 
           if unsafe_hits:
               print("ERROR: Unsafe model-output interpolation detected.")
@@ -89,6 +98,10 @@ jobs:
           test -f profile.config.yml
           CONFIG_ITEMS="$(sed -n '/^currently_building:/,$p' profile.config.yml | sed -n 's/^  - /- /p')"
           README_ITEMS="$(sed -n '/<!--START_SECTION:currently_building-->/,/<!--END_SECTION:currently_building-->/p' README.md | sed '1d;$d')"
+          if [ -z "$CONFIG_ITEMS" ] || [ -z "$README_ITEMS" ]; then
+            echo "ERROR: Unable to extract currently_building items from profile.config.yml or README.md"
+            exit 1
+          fi
           if [ "$CONFIG_ITEMS" != "$README_ITEMS" ]; then
             echo "ERROR: README currently_building section is out of sync with profile.config.yml"
             echo "profile.config.yml:"
