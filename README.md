@@ -103,7 +103,6 @@ flowchart TD
   G --> G2[Templates]
   G --> G3[Profile Components]
 ```
-
 ---
 
 ## Featured projects
@@ -203,3 +202,5 @@ Most projects are structured with clear boundaries between **core logic**, **pol
     <img src="https://img.shields.io/badge/GitHub-GoodshytGroup-1B4332?style=for-the-badge&logo=github" alt="GitHub" />
   </a>
 </p>
+
+
