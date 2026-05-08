@@ -194,8 +194,8 @@ I like systems that are:
 Most projects are structured with clear boundaries between **core logic**, **policy**, **interfaces**, and **automation**.
 
 ---
-
-## Connect
+## 
+Connect
 
 <p align="center">
   <a href="https://github.com/GoodshytGroup">
