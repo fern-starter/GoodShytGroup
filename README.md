@@ -103,7 +103,6 @@ flowchart TD
   G --> G2[Templates]
   G --> G3[Profile Components]
 ```
-
 ---
 
 ## Featured projects
